@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.vite/
+
+# Local env files
+.env
+.env.local
+.env.*.local
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.log
