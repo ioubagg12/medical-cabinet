@@ -40,7 +40,7 @@ export default function App() {
                 {greeting}
               </span>
               <span style={{ fontSize: '27px', fontWeight: '800', letterSpacing: '-.5px', color: '#15160f' }}>
-                Gabriel Creanga
+                John Doe
               </span>
             </div>
             {isDoctor ? (<>
