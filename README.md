@@ -15,6 +15,9 @@ The React app in `app/` is a port of the original. Same screens, same styling,
 ordinary source you can edit. See [app/README.md](app/README.md) for the file
 map and notes on what changed in the port.
 
+The code is split into 5 epics, one per tab, so several people can work in
+parallel: see [EPICS.md](EPICS.md).
+
 ## Run
 
 ```bash

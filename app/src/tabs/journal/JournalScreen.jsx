@@ -1,6 +1,13 @@
 import React from 'react'
 
-export default function Journal({ timeline, rubrics, openCompose }) {
+import { RUBRICS, TIMELINE } from './data.jsx'
+
+const noop = () => {}
+const rubrics = RUBRICS.map((r) => ({ ...r, onClick: noop }))
+const timeline = TIMELINE
+
+// openCompose comes from the Messages tab (the "write to clinic" button).
+export default function JournalScreen({ openCompose }) {
   return (
     <>
       <div style={{ padding: '0 22px 6px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '10px' }}>
@@ -26,7 +33,7 @@ export default function Journal({ timeline, rubrics, openCompose }) {
         <p style={{ margin: '0', fontSize: '13.5px', lineHeight: '1.55', color: '#cfe5da', textWrap: 'pretty' }}>
           Your vitamin D was slightly low in May. Keep the daily 38 µg supplement through the winter and book a repeat blood test in November.
         </p>
-        <div className="mc-h8" role="button" onClick={openCompose} style={{ alignSelf: 'flex-start', fontSize: '12.5px', fontWeight: '700', color: '#0f3b2b', background: '#7de3b4', padding: '9px 15px', borderRadius: '20px', cursor: 'pointer' }}>
+        <div className="journal-h8" role="button" onClick={openCompose} style={{ alignSelf: 'flex-start', fontSize: '12.5px', fontWeight: '700', color: '#0f3b2b', background: '#7de3b4', padding: '9px 15px', borderRadius: '20px', cursor: 'pointer' }}>
           Ask a question
         </div>
       </div>
@@ -63,7 +70,7 @@ export default function Journal({ timeline, rubrics, openCompose }) {
       </div>
       <div style={{ margin: '0 18px 22px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
         {rubrics.map((r, i5) => (<React.Fragment key={i5}>
-          <div className="mc-h9" role="button" onClick={r.onClick} style={{ background: '#fff', borderRadius: '20px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px', cursor: 'pointer' }}>
+          <div className="journal-h9" role="button" onClick={r.onClick} style={{ background: '#fff', borderRadius: '20px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px', cursor: 'pointer' }}>
             <div style={{ width: '32px', height: '32px', borderRadius: '11px', background: '#e8f7f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {r.icon}
             </div>

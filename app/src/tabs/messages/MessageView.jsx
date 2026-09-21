@@ -15,7 +15,7 @@ export default function MessageView({ openMsg, closeMsg, openCompose }) {
                 {openMsg.clinic} · {openMsg.time}
               </span>
             </div>
-            <div className="mc-h15" role="button" onClick={closeMsg} style={{ width: '30px', height: '30px', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: '#f2f2f0', color: '#43463f', cursor: 'pointer' }}>
+            <div className="messages-h15" role="button" onClick={closeMsg} style={{ width: '30px', height: '30px', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: '#f2f2f0', color: '#43463f', cursor: 'pointer' }}>
               <svg width="13" height="13" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
                 <path d="M5 5l14 14M19 5L5 19" />
               </svg>
@@ -28,13 +28,13 @@ export default function MessageView({ openMsg, closeMsg, openCompose }) {
             {openMsg.body}
           </p>
           <div style={{ display: 'flex', gap: '10px', paddingTop: '2px' }}>
-            <div className="mc-h16" role="button" onClick={openCompose} style={{ flex: '1', height: '48px', borderRadius: '26px', background: '#00b070', color: '#fff', fontSize: '14.5px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
+            <div className="messages-h16" role="button" onClick={openCompose} style={{ flex: '1', height: '48px', borderRadius: '26px', background: '#00b070', color: '#fff', fontSize: '14.5px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 3L3 10.5l7 2.5 2.5 7L21 3Z" />
               </svg>
               Reply
             </div>
-            <div className="mc-h17" role="button" onClick={closeMsg} style={{ width: '110px', height: '48px', borderRadius: '26px', background: '#f2f2f0', color: '#43463f', fontSize: '14.5px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+            <div className="messages-h17" role="button" onClick={closeMsg} style={{ width: '110px', height: '48px', borderRadius: '26px', background: '#f2f2f0', color: '#43463f', fontSize: '14.5px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
               Archive
             </div>
           </div>

@@ -7,7 +7,7 @@ export default function Compose({ closeCompose, sendMsg }) {
             <span style={{ fontSize: '17px', fontWeight: '800', color: '#15160f' }}>
               New message
             </span>
-            <div className="mc-h18" role="button" onClick={closeCompose} style={{ width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: '#f2f2f0', color: '#43463f', cursor: 'pointer' }}>
+            <div className="messages-h18" role="button" onClick={closeCompose} style={{ width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: '#f2f2f0', color: '#43463f', cursor: 'pointer' }}>
               <svg width="13" height="13" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
                 <path d="M5 5l14 14M19 5L5 19" />
               </svg>
@@ -29,7 +29,7 @@ export default function Compose({ closeCompose, sendMsg }) {
               Describe your symptoms, when they started, and any medication you are taking…
             </span>
           </div>
-          <div className="mc-h19" role="button" onClick={sendMsg} style={{ height: '50px', borderRadius: '26px', background: '#00b070', color: '#fff', fontSize: '15px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '9px', cursor: 'pointer' }}>
+          <div className="messages-h19" role="button" onClick={sendMsg} style={{ height: '50px', borderRadius: '26px', background: '#00b070', color: '#fff', fontSize: '15px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '9px', cursor: 'pointer' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 3L3 10.5l7 2.5 2.5 7L21 3Z" />
               <path d="M10 13L21 3" />

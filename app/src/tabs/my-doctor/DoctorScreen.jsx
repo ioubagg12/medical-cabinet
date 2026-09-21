@@ -1,6 +1,12 @@
 import React from 'react'
 
-export default function Doctor({ noticeOpen, closeNotice, actions, tiles }) {
+import { ACTIONS, TILES } from './data.jsx'
+
+const noop = () => {}
+const actions = ACTIONS.map((a) => ({ ...a, onClick: noop }))
+const tiles = TILES
+
+export default function DoctorScreen({ noticeOpen, closeNotice }) {
   return (
     <>
       {noticeOpen ? (<>
@@ -9,7 +15,7 @@ export default function Doctor({ noticeOpen, closeNotice, actions, tiles }) {
             <span style={{ fontSize: '16.5px', fontWeight: '800', color: '#15160f', maxWidth: '230px', lineHeight: '1.25' }}>
               Watch out for fake messages
             </span>
-            <div className="mc-h11" role="button" onClick={closeNotice} style={{ width: '26px', height: '26px', margin: '-4px -4px 0 0', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', cursor: 'pointer', color: '#8b8e86' }}>
+            <div className="doctor-h11" role="button" onClick={closeNotice} style={{ width: '26px', height: '26px', margin: '-4px -4px 0 0', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', cursor: 'pointer', color: '#8b8e86' }}>
               <svg width="13" height="13" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
                 <path d="M5 5l14 14M19 5L5 19" />
               </svg>
@@ -49,7 +55,7 @@ export default function Doctor({ noticeOpen, closeNotice, actions, tiles }) {
             My doctor
           </span>
         </div>
-        <div className="mc-h12" role="button" style={{ padding: '18px 22px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+        <div className="doctor-h12" role="button" style={{ padding: '18px 22px', display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
           <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '3px', fontSize: '15px', color: '#43463f', lineHeight: '1.45' }}>
             <span style={{ fontWeight: '700', color: '#15160f' }}>
               Kongevejsparkens Lægehus
@@ -68,7 +74,7 @@ export default function Doctor({ noticeOpen, closeNotice, actions, tiles }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '6px', padding: '4px 14px 24px' }}>
           {actions.map((a, i6) => (<React.Fragment key={i6}>
             <div role="button" onClick={a.onClick} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '9px', cursor: 'pointer', padding: '6px 0' }}>
-              <div className="mc-h13" style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#00b070', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 14px rgba(0,176,112,.3)' }}>
+              <div className="doctor-h13" style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#00b070', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 6px 14px rgba(0,176,112,.3)' }}>
                 {a.icon}
               </div>
               <span style={{ fontSize: '11.5px', fontWeight: '600', color: '#5d6058', textAlign: 'center', lineHeight: '1.25' }}>
@@ -93,7 +99,7 @@ export default function Doctor({ noticeOpen, closeNotice, actions, tiles }) {
       </div>
       <div className="sc" style={{ display: 'flex', gap: '12px', overflowX: 'auto', scrollbarWidth: 'none', padding: '0 18px 4px' }}>
         {tiles.map((t, i5) => (<React.Fragment key={i5}>
-          <div className="mc-h14" role="button" style={{ flex: 'none', width: '132px', background: '#fff', borderRadius: '20px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '22px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', cursor: 'pointer' }}>
+          <div className="doctor-h14" role="button" style={{ flex: 'none', width: '132px', background: '#fff', borderRadius: '20px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '22px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', cursor: 'pointer' }}>
             <div style={{ width: '34px', height: '34px', borderRadius: '11px', background: '#e8f7f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {t.icon}
             </div>

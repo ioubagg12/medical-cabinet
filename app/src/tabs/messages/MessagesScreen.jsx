@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Messages({ threads, openCompose }) {
+export default function MessagesScreen({ threads, openCompose }) {
   return (
     <>
       <div style={{ padding: '0 22px 16px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
@@ -13,7 +13,7 @@ export default function Messages({ threads, openCompose }) {
       </div>
       <div style={{ margin: '0 18px 22px', background: '#fff', borderRadius: '24px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', overflow: 'hidden' }}>
         {threads.map((m, i5) => (<React.Fragment key={i5}>
-          <div className="mc-h2" role="button" onClick={m.onClick} style={{ padding: '16px 20px', display: 'flex', gap: '13px', alignItems: 'flex-start', borderTop: '1px solid #f0f1ee', cursor: 'pointer' }}>
+          <div className="messages-h2" role="button" onClick={m.onClick} style={{ padding: '16px 20px', display: 'flex', gap: '13px', alignItems: 'flex-start', borderTop: '1px solid #f0f1ee', cursor: 'pointer' }}>
             <div style={{ width: '40px', height: '40px', flex: 'none', borderRadius: '50%', background: '#e8f7f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '800', color: '#00875a' }}>
               {m.initials}
             </div>
@@ -46,7 +46,7 @@ export default function Messages({ threads, openCompose }) {
         </span>
       </div>
       <div style={{ margin: '0 18px 8px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-        <div className="mc-h3" role="button" onClick={openCompose} style={{ background: '#fff', borderRadius: '20px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '18px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', cursor: 'pointer' }}>
+        <div className="messages-h3" role="button" onClick={openCompose} style={{ background: '#fff', borderRadius: '20px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '18px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', cursor: 'pointer' }}>
           <div style={{ width: '34px', height: '34px', borderRadius: '11px', background: '#e8f7f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b070" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 20h16" />
@@ -57,7 +57,7 @@ export default function Messages({ threads, openCompose }) {
             Medical question
           </span>
         </div>
-        <div className="mc-h4" role="button" onClick={openCompose} style={{ background: '#fff', borderRadius: '20px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '18px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', cursor: 'pointer' }}>
+        <div className="messages-h4" role="button" onClick={openCompose} style={{ background: '#fff', borderRadius: '20px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '18px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', cursor: 'pointer' }}>
           <div style={{ width: '34px', height: '34px', borderRadius: '11px', background: '#e8f7f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00b070" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 4h6l1 3H8l1-3Z" />

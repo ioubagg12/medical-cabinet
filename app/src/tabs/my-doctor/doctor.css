@@ -1,0 +1,6 @@
+/* My Doctor tab styles. Owned by: My Doctor epic. Class names start with `doctor-`. */
+.doctor-h0:hover { background:#009c62; }
+.doctor-h11:hover { background:#f2f2f0;color:#15160f; }
+.doctor-h12:hover { background:#fafbf9; }
+.doctor-h13:hover { background:#009c62; }
+.doctor-h14:hover { box-shadow:0 6px 18px rgba(20,22,16,.1); }
