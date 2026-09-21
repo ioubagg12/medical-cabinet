@@ -1,6 +1,6 @@
 // Self-check for the check-up scheduling rules. Run with: npm run check
 import assert from 'node:assert/strict'
-import { STATUS, TODAY, statusOf, dueLabels, addMonths, fmt, iso } from '../src/checkup.js'
+import { STATUS, TODAY, statusOf, dueLabels, addMonths, fmt, iso } from '../src/tabs/me/checkup.js'
 
 const organ = (monthsAgo, freq = 12) => ({
   last: iso(addMonths(TODAY, -monthsAgo)),

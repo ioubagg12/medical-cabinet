@@ -1,5 +1,5 @@
-// Demo content for the prototype. Organ and message records are the originals,
-// extracted verbatim from the single-file export.
+// Organs on the body map: check-up frequency and uploaded files. Owned by: Me epic.
+// Records are the originals, extracted verbatim from the single-file export.
 
 export const ORGANS = {
       heart: { name: 'Heart', speciality: 'Cardiology', last: '2026-07-18', freq: 12,
@@ -18,41 +18,3 @@ export const ORGANS = {
         icon: { vb: '268 253 188 253', d: 'M362 300c34 42 58 72 58 101a58 58 0 01-116 0c0-29 24-59 58-101z', t: 'translate(362 380) scale(1.5) translate(-362 -380)' },
         files: [{ name: 'blood_work_june.pdf', date: '18 Jun 2026' }, { name: 'vitamin_panel_aug.pdf', date: '18 Aug 2026' }] }
     }
-
-export const MESSAGES = [
-    { id: 1, from: 'Dr. Mette Holm', initials: 'MH', clinic: 'Kongevejsparkens Lægehus', time: '14:05', subject: 'Your blood test results', preview: 'Everything looks normal apart from…', unread: true,
-      body: 'Hi Gabriel. I have reviewed your blood test from 10 May. Your values are within the normal range apart from vitamin D, which is slightly low. I suggest a daily supplement of 38 µg through the winter. No further tests are needed for now — write back here if you notice any tiredness or muscle pain.' },
-    { id: 2, from: 'Clinic secretary', initials: 'CS', clinic: 'Kongevejsparkens Lægehus', time: 'Yesterday', subject: 'Prescription renewed', preview: 'Your prescription is ready at the pharmacy', unread: false,
-      body: 'Your prescription has been renewed and sent to Apoteket Sønderborg. It can be collected from tomorrow morning and is valid for six months.' },
-    { id: 3, from: 'Dr. Mette Holm', initials: 'MH', clinic: 'Kongevejsparkens Lægehus', time: '8 May', subject: 'After your visit', preview: 'Thanks for coming in — a short summary', unread: false,
-      body: 'Thanks for coming in on Tuesday. Keep taking the medication for the full ten days even if the symptoms disappear earlier, and book a follow-up if the cough is still there in two weeks.' }
-  ]
-
-export const FACTS = [
-  { label: 'Date of birth', value: '14 March 1991' },
-  { label: 'Blood type', value: 'A rh+' },
-  { label: 'Height', value: '182 cm' },
-  { label: 'Weight', value: '78 kg' },
-]
-
-export const FLAGS = [
-  { label: 'Penicillin allergy', tone: '#7a2418', bg: '#fdeae6' },
-  { label: 'Lactose intolerant', tone: '#7a5a18', bg: '#fdf3e0' },
-  { label: 'Organ donor', tone: '#026b48', bg: '#e8f7f0' },
-]
-
-export const SETTINGS = [
-  { label: 'Personal details', meta: 'Address, phone, email' },
-  { label: 'Emergency contact', meta: 'Ana Creanga · +45 28 41 09 66' },
-  { label: 'Sharing & consent', meta: 'Who can see your journal' },
-  { label: 'Log in & security', meta: 'MitID, biometrics' },
-]
-
-export const TIMELINE = [
-  { date: '12 May 2026', title: 'Blood test reviewed', meta: 'Dr. Mette Holm · vitamin D slightly low', dot: '#00b070', ring: '#d8f2e6' },
-  { date: '8 May 2026', title: 'Consultation — spring cough', meta: 'Kongevejsparkens Lægehus · resolved', dot: '#00b070', ring: '#d8f2e6' },
-  { date: '2 Apr 2026', title: 'Migraine follow-up', meta: 'Sumatriptan 50 mg renewed', dot: '#c2c7bd', ring: '#eceee9' },
-  { date: '19 Feb 2026', title: 'MRI left knee', meta: 'Sønderborg Hospital · no damage found', dot: '#c2c7bd', ring: '#eceee9' },
-  { date: '22 Nov 2024', title: 'Tetanus booster', meta: 'Left arm · next due 2034', dot: '#c2c7bd', ring: '#eceee9' },
-  { date: '3 Oct 2019', title: 'Lactose intolerance confirmed', meta: 'Lab result · positive', dot: '#c2c7bd', ring: '#eceee9' },
-]

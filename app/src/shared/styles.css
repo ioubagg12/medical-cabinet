@@ -1,0 +1,13 @@
+/* Global base styles. Owned by: shared core. */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #faf9f5;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The phone frame scrolls its own content; hide that scrollbar. */
+.sc::-webkit-scrollbar { display: none; }
+
+/* Hover states live with each tab: src/tabs/<tab>/<tab>.css (class prefix = tab). */

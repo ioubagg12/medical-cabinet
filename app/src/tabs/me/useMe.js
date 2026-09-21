@@ -1,30 +1,19 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { ORGANS, MESSAGES, FACTS, FLAGS, SETTINGS, TIMELINE } from './data'
-import { ACTIONS, TILES, RUBRICS, TABS } from './icons'
-import { STATUS, TODAY, iso, fmt, monthsBetween, statusOf, dueLabels } from './checkup'
-
-const greetingFor = (hour) => (hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening')
+import { useMemo, useState } from 'react'
+import { ORGANS } from './organs.js'
+import { STATUS, TODAY, iso, fmt, monthsBetween, statusOf, dueLabels } from './checkup.js'
 
 const noop = () => {}
 
 /**
- * Everything the screens render from: state, plus the values derived from it.
- * The screens stay presentational — they receive this object spread as props.
+ * State for the Me tab: selected organ, check-up logging, file uploads.
+ * Lives in App (not MeScreen) so it survives switching tabs. Owned by: Me epic.
  */
-export function useAppState() {
-  const [tab, setTab] = useState('Me')
-  const [noticeOpen, setNoticeOpen] = useState(true)
-  const [openId, setOpenId] = useState(null)
-  const [composeOpen, setComposeOpen] = useState(false)
-  const [sentToast, setSentToast] = useState(false)
+export function useMe() {
   const [sel, setSel] = useState('heart')
   const [logOpen, setLogOpen] = useState(false)
   const [logDate, setLogDate] = useState(iso(TODAY))
   const [dragOver, setDragOver] = useState(false)
   const [organs, setOrgans] = useState(ORGANS)
-
-  const toastTimer = useRef(null)
-  useEffect(() => () => clearTimeout(toastTimer.current), [])
 
   const addFiles = (list) => {
     const names = Array.from(list || []).map((f) => f.name).filter(Boolean)
@@ -107,46 +96,8 @@ export function useAppState() {
     }
   }, [organs, sel, dragOver])
 
-  const nav = TABS.map((t) => {
-    const on = tab === t.label
-    const c = on ? '#00b070' : '#8b8e86'
-    return { label: t.label, color: on ? '#15160f' : '#8b8e86', icon: t.icon(c, on), onClick: () => setTab(t.label) }
-  })
-
   return {
     ...checkup,
-    greeting: greetingFor(new Date().getHours()),
-
-    isMe: tab === 'Me',
-    isDoctor: tab === 'My Doctor',
-    isMessages: tab === 'Messages',
-    isJournal: tab === 'Journal',
-    isProfile: tab === 'Profile',
-    nav,
-
-    noticeOpen,
-    closeNotice: () => setNoticeOpen(false),
-    actions: ACTIONS.map((a) => ({ ...a, onClick: noop })),
-    tiles: TILES,
-    rubrics: RUBRICS.map((r) => ({ ...r, onClick: noop })),
-    timeline: TIMELINE,
-    facts: FACTS,
-    flags: FLAGS,
-    settings: SETTINGS.map((s) => ({ ...s, onClick: noop })),
-
-    threads: MESSAGES.map((m) => ({ ...m, weight: m.unread ? 800 : 600, onClick: () => setOpenId(m.id) })),
-    openMsg: MESSAGES.find((m) => m.id === openId) || false,
-    closeMsg: () => setOpenId(null),
-    composeOpen,
-    openCompose: () => { setComposeOpen(true); setOpenId(null) },
-    closeCompose: () => setComposeOpen(false),
-    sentToast,
-    sendMsg: () => {
-      setComposeOpen(false)
-      setSentToast(true)
-      clearTimeout(toastTimer.current)
-      toastTimer.current = setTimeout(() => setSentToast(false), 2600)
-    },
 
     logOpen,
     logClosed: !logOpen,

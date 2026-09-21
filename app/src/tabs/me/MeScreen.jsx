@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Me({ summary, c, showHeart, showLungs, showEyes, showKidneys, showBlood, chips, bloodChip, pick, sel, logOpen, logClosed, logDate, openLog, cancelLog, onLogDate, saveCheckup, dz, onDragOver, onDragLeave, onDrop, onFiles }) {
+export default function MeScreen({ summary, c, showHeart, showLungs, showEyes, showKidneys, showBlood, chips, bloodChip, pick, sel, logOpen, logClosed, logDate, openLog, cancelLog, onLogDate, saveCheckup, dz, onDragOver, onDragLeave, onDrop, onFiles }) {
   return (
     <>
       <div style={{ padding: '0 22px 6px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '10px' }}>
@@ -196,7 +196,7 @@ export default function Me({ summary, c, showHeart, showLungs, showEyes, showKid
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px' }}>
             {logOpen ? (<>
               <input type="date" value={logDate} onChange={onLogDate} style={{ minHeight: '44px', padding: '0 14px', borderRadius: '22px', border: '1.5px solid #dfe2dc', background: '#fff', font: '700 13px Manrope,sans-serif', color: '#15160f' }} />
-              <div className="mc-h5" role="button" onClick={saveCheckup} style={{ display: 'flex', alignItems: 'center', minHeight: '44px', padding: '0 20px', borderRadius: '22px', cursor: 'pointer', background: '#026b48', color: '#fff', fontSize: '13px', fontWeight: '800' }}>
+              <div className="me-h5" role="button" onClick={saveCheckup} style={{ display: 'flex', alignItems: 'center', minHeight: '44px', padding: '0 20px', borderRadius: '22px', cursor: 'pointer', background: '#026b48', color: '#fff', fontSize: '13px', fontWeight: '800' }}>
                 Save check-up
               </div>
               <div role="button" onClick={cancelLog} style={{ display: 'flex', alignItems: 'center', minHeight: '44px', padding: '0 16px', borderRadius: '22px', cursor: 'pointer', color: '#6d7069', fontSize: '13px', fontWeight: '700' }}>
@@ -204,7 +204,7 @@ export default function Me({ summary, c, showHeart, showLungs, showEyes, showKid
               </div>
             </>) : null}
             {logClosed ? (<>
-              <div className="mc-h6" role="button" onClick={openLog} style={{ display: 'flex', alignItems: 'center', gap: '9px', minHeight: '44px', padding: '0 20px', borderRadius: '22px', cursor: 'pointer', background: '#026b48', color: '#fff', fontSize: '13px', fontWeight: '800' }}>
+              <div className="me-h6" role="button" onClick={openLog} style={{ display: 'flex', alignItems: 'center', gap: '9px', minHeight: '44px', padding: '0 20px', borderRadius: '22px', cursor: 'pointer', background: '#026b48', color: '#fff', fontSize: '13px', fontWeight: '800' }}>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round">
                   <path d="M12 6v12M6 12h12" />
                 </svg>
@@ -255,7 +255,7 @@ export default function Me({ summary, c, showHeart, showLungs, showEyes, showKid
                     Uploaded {f.date}
                   </span>
                 </div>
-                <div className="mc-h7" role="button" onClick={f.onView} style={{ display: 'flex', alignItems: 'center', minHeight: '44px', padding: '0 14px', borderRadius: '20px', cursor: 'pointer', fontSize: '12px', fontWeight: '800', color: '#026b48', background: '#e8f7f0' }}>
+                <div className="me-h7" role="button" onClick={f.onView} style={{ display: 'flex', alignItems: 'center', minHeight: '44px', padding: '0 14px', borderRadius: '20px', cursor: 'pointer', fontSize: '12px', fontWeight: '800', color: '#026b48', background: '#e8f7f0' }}>
                   View
                 </div>
               </div>

@@ -1,6 +1,11 @@
 import React from 'react'
 
-export default function Profile({ facts, flags, settings }) {
+import { FACTS as facts, FLAGS as flags, SETTINGS } from './data.js'
+
+export default function ProfileScreen() {
+  // Built each render so the meta getters show the latest saved contact details.
+  // Personal details / Emergency contact open the edit sheet from contact.js.
+  const settings = SETTINGS.map((s) => ({ ...s, onClick: () => window.MC_edit?.(s.label) }))
   return (
     <>
       <div style={{ padding: '0 22px 6px', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '10px' }}>
@@ -52,7 +57,7 @@ export default function Profile({ facts, flags, settings }) {
       </div>
       <div style={{ margin: '0 18px 22px', background: '#fff', borderRadius: '26px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', overflow: 'hidden' }}>
         {settings.map((s, i5) => (<React.Fragment key={i5}>
-          <div className="mc-h10" role="button" onClick={s.onClick} style={{ padding: '15px 20px', display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1px solid #f0f1ee', cursor: 'pointer' }}>
+          <div className="profile-h10" role="button" onClick={s.onClick} style={{ padding: '15px 20px', display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1px solid #f0f1ee', cursor: 'pointer' }}>
             <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <span style={{ fontSize: '14px', fontWeight: '700', color: '#15160f' }}>
                 {s.label}

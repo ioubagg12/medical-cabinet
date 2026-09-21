@@ -1,0 +1,10 @@
+/* Messages tab styles. Owned by: Messages epic. Class names start with `messages-`. */
+.messages-h1:hover { background:#009c62; }
+.messages-h2:hover { background:#fafbf9; }
+.messages-h3:hover { box-shadow:0 6px 18px rgba(20,22,16,.1); }
+.messages-h4:hover { box-shadow:0 6px 18px rgba(20,22,16,.1); }
+.messages-h15:hover { background:#e6e7e3; }
+.messages-h16:hover { background:#009c62; }
+.messages-h17:hover { background:#e6e7e3; }
+.messages-h18:hover { background:#e6e7e3; }
+.messages-h19:hover { background:#009c62; }
