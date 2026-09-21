@@ -9,6 +9,7 @@ journal timeline, profile.
 app/        React app — this is the one you work in
 index.html  the original single-file prototype (bundled export, kept for reference)
 serve.py    static server for that original file
+tools/blood-compare/  standalone blood-report comparison prototype (separate from the app)
 ```
 
 The React app in `app/` is a port of the original. Same screens, same styling,

@@ -1,0 +1,27 @@
+marker,value,unit
+Hemoglobin,11.6,g/dL
+Hematocrit,35.2,%
+RBC,4.1,10^6/uL
+MCV,78,fL
+WBC,7.2,10^9/L
+Platelets,312,10^3/uL
+Glucose,104,mg/dL
+HbA1c,5.8,%
+Sodium,140,mmol/L
+Potassium,4.4,mmol/L
+Chloride,102,mmol/L
+Bicarbonate,25,mmol/L
+BUN,14,mg/dL
+Creatinine,0.82,mg/dL
+Calcium,9.3,mg/dL
+Albumin,4.2,g/dL
+ALT,28,U/L
+AST,24,U/L
+Total cholesterol,5.9,mmol/L
+LDL,3.8,mmol/L
+HDL,1.4,mmol/L
+Triglycerides,1.6,mmol/L
+TSH,4.8,mIU/L
+Vitamin D,21,ng/mL
+Ferritin,9,ng/mL
+Uric acid,5.1,mg/dL
