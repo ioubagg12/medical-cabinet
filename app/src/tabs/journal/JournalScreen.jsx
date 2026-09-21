@@ -1,6 +1,8 @@
 import React from 'react'
 
 import { RUBRICS, TIMELINE } from './data.jsx'
+import { ADVICE } from './advice.js'
+import AdviceCard from './AdviceCard.jsx'
 
 const noop = () => {}
 const rubrics = RUBRICS.map((r) => ({ ...r, onClick: noop }))
@@ -18,25 +20,7 @@ export default function JournalScreen({ openCompose }) {
           Your full history
         </span>
       </div>
-      <div style={{ margin: '0 18px 16px', background: '#0f3b2b', borderRadius: '26px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '30px', height: '30px', borderRadius: '10px', background: 'rgba(255,255,255,.14)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7de3b4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 3a6 6 0 0 0-3.5 10.9V17h7v-3.1A6 6 0 0 0 12 3Z" />
-              <path d="M10 20h4" />
-            </svg>
-          </div>
-          <span style={{ fontSize: '15px', fontWeight: '800', color: '#fff' }}>
-            Advice
-          </span>
-        </div>
-        <p style={{ margin: '0', fontSize: '13.5px', lineHeight: '1.55', color: '#cfe5da', textWrap: 'pretty' }}>
-          Your vitamin D was slightly low in May. Keep the daily 38 µg supplement through the winter and book a repeat blood test in November.
-        </p>
-        <div className="journal-h8" role="button" onClick={openCompose} style={{ alignSelf: 'flex-start', fontSize: '12.5px', fontWeight: '700', color: '#0f3b2b', background: '#7de3b4', padding: '9px 15px', borderRadius: '20px', cursor: 'pointer' }}>
-          Ask a question
-        </div>
-      </div>
+      <AdviceCard advice={ADVICE} openCompose={openCompose} />
       <div style={{ margin: '0 18px 16px', background: '#fff', borderRadius: '26px', boxShadow: '0 2px 10px rgba(20,22,16,.05)', padding: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '10px', marginBottom: '8px' }}>
           <span style={{ fontSize: '15px', fontWeight: '800', color: '#15160f' }}>
