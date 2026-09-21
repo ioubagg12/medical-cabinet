@@ -2,7 +2,7 @@
 // Owned by: Journal epic.
 //
 // Placeholder data for the design. The real logic should produce an object
-// of this same shape from the blood results; AdviceCard only renders it.
+// of this same shape from the blood results; AdvicePage only renders it.
 //
 //   source           which test the advice is based on
 //   markers[]        blood values; status is 'low' | 'normal' | 'high'

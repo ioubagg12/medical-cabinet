@@ -1,4 +1,6 @@
 /* Journal tab styles. Owned by: Journal epic. Class names start with `journal-`. */
 .journal-h8:hover { background:#6ad3a4; }
 .journal-h9:hover { background:#fafbf9; }
-.journal-advice-tab:hover { background:rgba(255,255,255,.08); color:#fff; }
+.journal-advice-tab:hover { color:#15160f; }
+.journal-advice-open:hover { background:rgba(125,227,180,.12); }
+.journal-back:hover { background:#e6e7e3; color:#15160f; }

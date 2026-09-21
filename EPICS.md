@@ -8,7 +8,7 @@ Two people working on different epics edit different files, so their changes do 
 | 1 | **Me** | `app/src/tabs/me/` | Body map, organ chips, check-up tracker (status summary, due dates), "Log new check-up", uploaded files per organ, scheduling rules (`checkup.js`, tested by `npm run check`) |
 | 2 | **My Doctor** | `app/src/tabs/my-doctor/` | Doctor card, fake-message notice, quick actions (Call, Write, Book appointment, Start video), tiles (Prescriptions, Test results, Vaccinations, Family), header bell |
 | 3 | **Messages** | `app/src/tabs/messages/` | Inbox list, message view, compose sheet, "message sent" toast, header compose button |
-| 4 | **Journal** | `app/src/tabs/journal/` | Advice (blood markers + nutrition/exercise tips, `advice.js` + `AdviceCard.jsx`), record categories (Medicine, Lab results, Diagnoses, Vaccinations), health timeline |
+| 4 | **Journal** | `app/src/tabs/journal/` | Advice card + Advice sub-page (blood markers, nutrition/exercise tips: `AdvicePage.jsx`, data in `advice.js`), record categories (Medicine, Lab results, Diagnoses, Vaccinations), health timeline |
 | 5 | **Profile** | `app/src/tabs/profile/` | Personal facts, flags (allergies, donor), settings rows, contact edit sheet (`contact.js`) and its `/api/contact` save in `app/public/serve.py` |
 
 ## Shared core (not part of any epic)
