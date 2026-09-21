@@ -3,7 +3,7 @@ import { MESSAGES } from './messages.js'
 
 /**
  * State for the Messages tab: open thread, compose sheet, "sent" toast.
- * Lives in App because Journal also opens the compose sheet. Owned by: Messages epic.
+ * Lives in App because the header button and overlays sit outside the screen. Owned by: Messages epic.
  */
 export function useMessages() {
   const [openId, setOpenId] = useState(null)

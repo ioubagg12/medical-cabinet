@@ -22,7 +22,7 @@ export default function App() {
     'Me': <MeScreen {...me} />,
     'My Doctor': <DoctorScreen {...doctor} />,
     'Messages': <MessagesScreen {...messages} />,
-    'Journal': <JournalScreen openCompose={messages.openCompose} />,
+    'Journal': <JournalScreen />,
     'Profile': <ProfileScreen />,
   }
   const headerActions = {

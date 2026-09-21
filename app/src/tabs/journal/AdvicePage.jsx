@@ -1,6 +1,6 @@
-// Advice page: a sub-page of the Journal tab, opened from the Advice card.
-// Shows the markers from the latest blood test, then nutrition or exercise
-// tips based on them. Owned by: Journal epic.
+// Blood test advice: a sub-page of the Journal tab, opened by tapping the
+// advice card. Everything on it comes from the latest blood analysis: the
+// markers, then nutrition or exercise tips based on them. Owned by: Journal epic.
 // Presentational only: `advice` comes from advice.js (see the shape there).
 import { useState } from 'react'
 
@@ -35,7 +35,7 @@ const KIND_ICON = {
 const card = { background: '#fff', borderRadius: '22px', boxShadow: '0 2px 10px rgba(20,22,16,.05)' }
 const sectionTitle = { fontSize: '15px', fontWeight: '800', color: '#15160f' }
 
-export default function AdvicePage({ advice, onBack, openCompose }) {
+export default function AdvicePage({ advice, onBack }) {
   const [kind, setKind] = useState('nutrition')
   const { source, markers, recommendations } = advice
   const flagged = markers.filter((m) => m.status !== 'normal')
@@ -52,10 +52,10 @@ export default function AdvicePage({ advice, onBack, openCompose }) {
         </div>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '10px' }}>
           <span style={{ fontSize: '24px', fontWeight: '800', letterSpacing: '-.4px', color: '#15160f' }}>
-            Advice
+            Blood test advice
           </span>
-          <span style={{ fontSize: '12px', fontWeight: '700', color: '#6d7069' }}>
-            {source.test} · {source.date}
+          <span style={{ fontSize: '12px', fontWeight: '700', color: '#6d7069', whiteSpace: 'nowrap' }}>
+            {source.date}
           </span>
         </div>
       </div>
@@ -151,14 +151,9 @@ export default function AdvicePage({ advice, onBack, openCompose }) {
         ))}
       </div>
 
-      <div style={{ margin: '0 18px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', padding: '4px' }}>
-        <span style={{ fontSize: '11.5px', lineHeight: '1.4', color: '#8b8e86' }}>
-          General guidance, not a diagnosis. Talk to your doctor before big changes.
-        </span>
-        <div className="journal-h8" role="button" onClick={openCompose} style={{ flex: 'none', fontSize: '12.5px', fontWeight: '700', color: INK, background: MINT, padding: '9px 15px', borderRadius: '20px', cursor: 'pointer' }}>
-          Ask a question
-        </div>
-      </div>
+      <p style={{ margin: '0 22px 22px', fontSize: '11.5px', lineHeight: '1.45', color: '#8b8e86' }}>
+        This advice is generated only from your blood analysis. It is general guidance, not a diagnosis. Talk to your doctor before big changes.
+      </p>
     </>
   )
 }
