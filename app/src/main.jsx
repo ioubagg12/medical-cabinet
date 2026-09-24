@@ -3,9 +3,13 @@ import { createRoot } from 'react-dom/client'
 import './shared/fonts.css'
 import './shared/styles.css'
 import App from './App.jsx'
+import AuthGate from './shared/AuthGate.jsx'
+import { connectProfile } from './tabs/profile/index.js'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <AuthGate onSignedIn={connectProfile}>
+      <App />
+    </AuthGate>
   </StrictMode>,
 )

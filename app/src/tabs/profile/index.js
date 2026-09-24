@@ -5,3 +5,6 @@ import './contact.js'
 import './profile.css'
 
 export { default as ProfileScreen } from './ProfileScreen.jsx'
+
+// Called by the sign-in gate after sign-in: loads this user's contact details from Supabase.
+export const connectProfile = (supabase, user) => window.MC_connectContact(supabase, user.id)

@@ -9,7 +9,7 @@ Two people working on different epics edit different files, so their changes do 
 | 2 | **My Doctor** | `app/src/tabs/my-doctor/` | Doctor card, fake-message notice, quick actions (Call, Write, Book appointment, Start video), tiles (Prescriptions, Test results, Vaccinations, Family), header bell |
 | 3 | **Messages** | `app/src/tabs/messages/` | Inbox list, message view, compose sheet, "message sent" toast, header compose button |
 | 4 | **Journal** | `app/src/tabs/journal/` | Blood test advice (card + sub-page built only from the blood analysis: markers, nutrition/exercise tips; `AdvicePage.jsx`, data in `advice.js`), record categories (Medicine, Lab results, Diagnoses, Vaccinations), health timeline |
-| 5 | **Profile** | `app/src/tabs/profile/` | Personal facts, flags (allergies, donor), settings rows, contact edit sheet (`contact.js`) and its `/api/contact` save in `app/public/serve.py` |
+| 5 | **Profile** | `app/src/tabs/profile/` | Personal facts, flags (allergies, donor), settings rows, contact edit sheet (`contact.js`), saved to the `profiles` table when signed in with Supabase, otherwise through `/api/contact` in `app/public/serve.py` |
 
 ## Shared core (not part of any epic)
 
@@ -18,6 +18,8 @@ These files affect every tab. Change them in a small, separate pull request and 
 - `app/src/App.jsx`: phone frame, status bar, greeting header, tab switching, bottom nav
 - `app/src/main.jsx`, `app/index.html`, `app/vite.config.js`, `app/package.json`
 - `app/src/shared/`: icon helpers + tab icons (`icons.jsx`), base CSS, fonts
+- `app/src/shared/supabase.js` (client) and `app/src/shared/AuthGate.jsx` (sign-in screen, signed-in check), `app/.env.example`
+- `supabase/migrations/`: database tables and their row level security. Every table change is a new migration file
 - `app/public/` and `app/scripts/` (except the Profile part of `serve.py`)
 
 ## Folder layout of an epic

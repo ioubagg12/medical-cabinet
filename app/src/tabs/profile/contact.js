@@ -1,5 +1,6 @@
 /* Medical Cabinet — editable contact details (Profile → Personal details / Emergency contact).
-   Data is saved by serve.py into contact.json next to this file, so every device sees the same values. */
+   Signed in with Supabase: saved in the user's row of the `profiles` table (see MC_connectContact).
+   Otherwise: saved by serve.py into contact.json, or in this browser if serve.py is not running. */
 (function () {
   var DEFAULTS = {
     personal: { address: "", phone: "", email: "" },
@@ -19,6 +20,17 @@
   if (!canSave) {
     try { var ls = localStorage.getItem("mc-contact"); if (ls) merge(JSON.parse(ls)); } catch { /* private mode: keep defaults */ }
   }
+
+  // Supabase backend, set by the sign-in gate once a user is signed in. Replaces /api/contact.
+  var remote = null;
+  window.MC_connectContact = function (client, userId) {
+    data = JSON.parse(JSON.stringify(DEFAULTS));
+    return client.from("profiles").select("contact").eq("id", userId).single().then(function (res) {
+      if (res.error) throw res.error;
+      remote = { client: client, userId: userId }; canSave = true;
+      merge(res.data.contact);
+    });
+  };
 
   function merge(d) {
     ["personal", "emergency"].forEach(function (k) {
@@ -173,13 +185,18 @@
       save.disabled = true; save.textContent = "Saving…";
       persist(all, function (err) {
         save.disabled = false; save.textContent = "Save";
-        if (err) { toast("Could not save — is the server running?"); return; }
+        if (err) { toast(remote ? "Could not save — check your connection" : "Could not save — is the server running?"); return; }
         data = all; refreshRow(label); close(); toast("Saved");
       });
     };
   };
 
   function persist(all, cb) {
+    if (remote) {
+      remote.client.from("profiles").update({ contact: all, updated_at: new Date().toISOString() }).eq("id", remote.userId)
+        .then(function (res) { cb(res.error); });
+      return;
+    }
     if (!canSave) {
       try { localStorage.setItem("mc-contact", JSON.stringify(all)); cb(null); } catch (e) { cb(e); }
       return;
