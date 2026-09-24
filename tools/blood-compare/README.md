@@ -7,7 +7,7 @@ Open `index.html` in a browser (double-click works, no server or install).
 `index.html` is the page; `engine.js` holds the reference data and all the
 matching, range and formula logic; `styles.css` is shared styling. Keep the
 three files together.
-Set the profile (age, sex, pregnancy, fasting, altitude), then upload or paste a
+Set the profile (age, sex, pregnancy, fasting, altitude, and the lab analyzer if known: Roche, Abbott or Siemens, which switches thyroid tests to that method's ranges), then upload or paste a
 lab sheet. Each value is compared with an age- and sex-specific reference range
 and shown as in range / below / above, with guideline notes (ADA, ACG, AHA)
 and calculated values (EKFC eGFR, LDL Friedewald + Sampson, anion gap,
@@ -34,7 +34,7 @@ different quantities; the Urea result (mmol/L) is checked instead.
 
 Built into `index.html` (`REF`), taken from the clinical research document.
 "Download current reference JSON" exports it; edit and load it back to try
-other ranges. Age brackets the research does not cover show as "unmatched".
+other ranges. Pediatric ranges come mainly from CALIPER. Age brackets the research does not cover show as "unmatched".
 
 ## Self-check
 

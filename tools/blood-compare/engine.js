@@ -10,73 +10,110 @@ const r = (ageMin, ageMax, low, high, x = {}) => ({ ageMin, ageMax, low, high, .
 const M = { sex: "M" }, F = { sex: "F" }, LT = { strict: true };
 const CELLS = { unit: "10^3/uL", siUnit: "10^9/L", siFactor: 1 };
 const LAB = "Mayo Clinic / Quest / LabCorp";
+const CAL = { source: "CALIPER (pediatric)" };
+// Method-specific ranges (thyroid immunoassays). Used only when the profile names the analyzer.
+const METHODS = { roche: "Roche Elecsys (ECLIA)", abbott: "Abbott Alinity/Architect (CMIA)", siemens: "Siemens Atellica" };
+const mr = (method, low, high, x = {}) => r(18, null, low, high, { method, source: METHODS[method] + " insert", ...x });
+const T1 = { sex: "F", pregnancy: 1, ageMin: null };
+const pm4 = x => x / 12.87, pm3 = x => x / 1.536; // FT4 / FT3 pmol/L to ng/dL / pg/mL
 
 let REF = { version: "research-2026-09", markers: [
   // CBC
   { id: "hgb", name: "Hemoglobin", loinc: "718-7", aliases: ["hb", "hgb", "haemoglobin", "hemoglobina"], unit: "g/dL", siUnit: "g/L", siFactor: 10, altitude: true, source: LAB, ranges: [
+    r(2, 3, 10.2, 13.8, CAL),
     r(0, 15 * D, 13.4, 20.0), r(15 * D, 5 * W, 10.0, 15.3), r(5 * W, 8 * W, 8.9, 12.7), r(8 * W, 6 * MO, 9.6, 12.4), r(6 * MO, 2, 10.1, 12.5),
     r(3, 6, 11.4, 14.3), r(6, 11, 11.5, 14.7), r(11, 15, 12.4, 15.7), r(15, 18, 13.3, 16.9, M), r(15, 18, 11.9, 14.8, F),
     r(18, null, 13.2, 16.6, M), r(18, null, 11.6, 15.0, F),
     r(null, null, 11.0, null, { ...F, pregnancy: 1, source: "CDC pregnancy cutoff" }), r(null, null, 10.5, null, { ...F, pregnancy: 2, source: "CDC pregnancy cutoff" }), r(null, null, 11.0, null, { ...F, pregnancy: 3, source: "CDC pregnancy cutoff" }) ] },
   { id: "hct", name: "Hematocrit", loinc: "4544-3", aliases: ["hct", "haematocrit", "pcv", "hematocrit"], unit: "%", siUnit: "L/L", siFactor: 0.01, source: LAB, ranges: [
+    r(15 * D, 3 * MO, 27.6, 38.8, CAL), r(2, 15, 31.0, 42.6, CAL),
     r(0, 15 * D, 39.6, 57.2), r(6 * MO, 2, 30.8, 37.9), r(15, 18, 40.0, 50.0, M), r(15, 18, 35.0, 43.0, F), r(18, null, 38.3, 48.6, M), r(18, null, 35.5, 44.9, F) ] },
   { id: "rbc", name: "RBC", loinc: "789-8", aliases: ["red blood cells", "erythrocytes", "red cell count", "eritrocite", "numar eritrocite"], unit: "10^6/uL", siUnit: "10^12/L", siFactor: 1, source: LAB, ranges: [
+    r(0, 6 * MO, 3.05, 5.22, CAL), r(2, 18, 3.90, 5.40, CAL),
     r(6 * MO, 2, 4.03, 5.07), r(18, null, 4.35, 5.65, M), r(18, null, 3.92, 5.13, F) ] },
   { id: "mcv", name: "MCV", loinc: "787-2", aliases: ["mean corpuscular volume", "vem", "volum eritrocitar mediu"], unit: "fL", siUnit: "fL", siFactor: 1, source: LAB, ranges: [
+    r(15 * D, 6 * MO, 72.0, 98.9, CAL), r(2, 3, 73.5, 85.3, CAL), r(6, 18, 77.4, 97.3, CAL),
     r(0, 15 * D, 91.3, 106.4), r(6 * MO, 2, 69.5, 81.7), r(3, 6, 77.2, 89.5), r(18, null, 78.2, 97.9) ] },
-  { id: "mch", name: "MCH", loinc: "785-6", aliases: ["mean corpuscular hemoglobin", "hem", "hemoglobina eritrocitara medie"], unit: "pg", siUnit: "pg", siFactor: 1, source: LAB, ranges: [r(18, null, 27.0, 32.0)] },
-  { id: "mchc", name: "MCHC", loinc: "786-4", aliases: ["chem", "concentratie medie a hb/eritrocit"], unit: "g/dL", siUnit: "g/L", siFactor: 10, source: LAB, ranges: [r(18, null, 31.5, 35.5)] },
+  { id: "mch", name: "MCH", loinc: "785-6", aliases: ["mean corpuscular hemoglobin", "hem", "hemoglobina eritrocitara medie"], unit: "pg", siUnit: "pg", siFactor: 1, source: LAB, ranges: [
+    r(0, 18, 23.3, 34.0, CAL),r(18, null, 27.0, 32.0)] },
+  { id: "mchc", name: "MCHC", loinc: "786-4", aliases: ["chem", "concentratie medie a hb/eritrocit"], unit: "g/dL", siUnit: "g/L", siFactor: 10, source: LAB, ranges: [
+    r(0, 18, 31.9, 34.5, CAL),r(18, null, 31.5, 35.5)] },
   { id: "rdw", name: "RDW-CV", loinc: "788-0", aliases: ["rdw", "red cell distribution width", "largimea distributiei eritrocitare"], unit: "%", siUnit: "%", siFactor: 1, source: LAB, ranges: [
+    r(15 * D, 3, 12.7, 17.7, CAL), r(6, 18, 12.5, 15.6, CAL),
     r(0, 15 * D, 14.6, 17.3), r(3, 6, 11.3, 13.4), r(18, null, 11.8, 14.5, M), r(18, null, 12.2, 16.1, F) ] },
   { id: "wbc", name: "WBC", loinc: "6690-2", aliases: ["white blood cells", "leukocytes", "white cell count", "leucocite", "numar leucocite"], ...CELLS, source: LAB, ranges: [
+    r(15 * D, 2, 5.75, 13.5, CAL), r(3, 6, 4.92, 11.8, CAL),
     r(0, 15 * D, 8.0, 15.4), r(2, 3, 5.1, 13.4), r(6, 18, 3.8, 10.4), r(18, null, 3.4, 9.6) ] },
-  { id: "neut", name: "Neutrophils (abs)", loinc: "751-8", aliases: ["neutrophils", "anc", "neu#", "neutrofile", "neutrofil"], ...CELLS, source: LAB, ranges: [r(18, null, 1.5, 8.0)] },
-  { id: "lymph", name: "Lymphocytes (abs)", loinc: "731-0", aliases: ["lymphocytes", "lym#", "limfocite", "limfocit"], ...CELLS, source: LAB, ranges: [r(18, null, 1.0, 4.8)] },
-  { id: "mono", name: "Monocytes (abs)", loinc: "742-7", aliases: ["monocytes", "mon#", "monocite", "monocit"], ...CELLS, source: LAB, ranges: [r(18, null, 0.2, 0.8)] },
-  { id: "eos", name: "Eosinophils (abs)", loinc: "711-2", aliases: ["eosinophils", "eos#", "eozinofile", "eozinofil"], ...CELLS, source: LAB, ranges: [r(18, null, 0.0, 0.5)] },
+  { id: "neut", name: "Neutrophils (abs)", loinc: "751-8", aliases: ["neutrophils", "anc", "neu#", "neutrofile", "neutrofil"], ...CELLS, source: LAB, ranges: [
+    r(0, 18, 1.25, 6.75, CAL),r(18, null, 1.5, 8.0)] },
+  { id: "lymph", name: "Lymphocytes (abs)", loinc: "731-0", aliases: ["lymphocytes", "lym#", "limfocite", "limfocit"], ...CELLS, source: LAB, ranges: [
+    r(0, 18, 1.13, 3.96, CAL),r(18, null, 1.0, 4.8)] },
+  { id: "mono", name: "Monocytes (abs)", loinc: "742-7", aliases: ["monocytes", "mon#", "monocite", "monocit"], ...CELLS, source: LAB, ranges: [
+    r(0, 18, 0.16, 0.74, CAL),r(18, null, 0.2, 0.8)] },
+  { id: "eos", name: "Eosinophils (abs)", loinc: "711-2", aliases: ["eosinophils", "eos#", "eozinofile", "eozinofil"], ...CELLS, source: LAB, ranges: [
+    r(0, 18, 0.01, 0.45, CAL),r(18, null, 0.0, 0.5)] },
   { id: "baso", name: "Basophils (abs)", loinc: "704-7", aliases: ["basophils", "bas#", "bazofile", "bazofil"], ...CELLS, source: LAB, ranges: [r(18, null, 0.0, 0.2)] },
   { id: "plt", name: "Platelets", loinc: "777-3", aliases: ["plt", "platelet count", "thrombocytes", "trombocite", "numar trombocite"], ...CELLS, source: LAB, ranges: [
+    r(15 * D, 6 * MO, 249, 696, CAL), r(2, 14, 206, 434, CAL),
     r(0, 15 * D, 144, 449), r(6 * MO, 2, 206, 459), r(14, 18, 139, 320), r(18, null, 135, 317, M), r(18, null, 157, 371, F) ],
     tiers: [{ lt: 50, label: "< 50: needs bleeding-risk review" }, { lt: 100, label: "< 100: actionable low" }] },
-  { id: "mpv", name: "MPV", loinc: "32623-1", aliases: ["mean platelet volume", "volum trombocitar mediu", "vtm"], unit: "fL", siUnit: "fL", siFactor: 1, source: LAB, ranges: [r(18, null, 8.5, 12.0)] },
+  { id: "mpv", name: "MPV", loinc: "32623-1", aliases: ["mean platelet volume", "volum trombocitar mediu", "vtm"], unit: "fL", siUnit: "fL", siFactor: 1, source: LAB, ranges: [
+    r(0, 18, 8.0, 11.5, CAL),r(18, null, 8.5, 12.0)] },
 
   // Metabolic panel
-  { id: "na", name: "Sodium", loinc: "2951-2", aliases: ["na", "sodiu"], unit: "mmol/L", siUnit: "mEq/L", siFactor: 1, source: LAB, ranges: [r(18, null, 135, 145)] },
-  { id: "k", name: "Potassium", loinc: "2823-3", aliases: ["k", "potasiu"], unit: "mmol/L", siUnit: "mEq/L", siFactor: 1, source: LAB + " (falsely high if sample hemolyzed)", ranges: [r(18, null, 3.5, 5.2)] },
-  { id: "cl", name: "Chloride", loinc: "2075-0", aliases: ["cl", "clor"], unit: "mmol/L", siUnit: "mEq/L", siFactor: 1, source: LAB, ranges: [r(1, 18, 102, 112), r(18, null, 98, 107)] },
-  { id: "hco3", name: "Bicarbonate", loinc: "1963-8", aliases: ["hco3", "co2", "total co2", "bicarb"], unit: "mmol/L", siUnit: "mEq/L", siFactor: 1, source: LAB, ranges: [r(1, 4, 18, 25), r(18, null, 22, 29)] },
+  { id: "na", name: "Sodium", loinc: "2951-2", aliases: ["na", "sodiu"], unit: "mmol/L", siUnit: "mEq/L", siFactor: 1, source: LAB, ranges: [
+    r(0, 18, 136, 145, CAL),r(18, null, 135, 145)] },
+  { id: "k", name: "Potassium", loinc: "2823-3", aliases: ["k", "potasiu"], unit: "mmol/L", siUnit: "mEq/L", siFactor: 1, source: LAB + " (falsely high if sample hemolyzed)", ranges: [
+    r(0, 18, 3.5, 5.1, CAL),r(18, null, 3.5, 5.2)] },
+  { id: "cl", name: "Chloride", loinc: "2075-0", aliases: ["cl", "clor"], unit: "mmol/L", siUnit: "mEq/L", siFactor: 1, source: LAB, ranges: [
+    r(0, 1, 98, 107, CAL),r(1, 18, 102, 112), r(18, null, 98, 107)] },
+  { id: "hco3", name: "Bicarbonate", loinc: "1963-8", aliases: ["hco3", "co2", "total co2", "bicarb"], unit: "mmol/L", siUnit: "mEq/L", siFactor: 1, source: LAB, ranges: [
+    r(0, 1, 19, 26, CAL), r(4, 18, 19, 26, CAL),r(1, 4, 18, 25), r(18, null, 22, 29)] },
   // BUN in mmol/L is not comparable between labs (some print urea × 28/60), so it is not converted. Urea is checked instead.
   { id: "bun", name: "BUN", loinc: "3094-0", aliases: ["urea nitrogen", "blood urea nitrogen"], unit: "mg/dL", siUnit: null, siFactor: null, source: LAB,
     unitNote: "BUN in mmol/L means different things at different labs; the Urea result is checked instead.", ranges: [
+    r(0, 1, 3.0, 12.0, CAL),
     r(1, 18, 7, 20), r(18, null, 8, 24, M), r(18, null, 6, 21, F) ] },
-  // Urea mmol/L = BUN mg/dL × 0.357, so these are the BUN ranges above, converted.
-  { id: "urea", name: "Urea", loinc: "22664-7", aliases: ["uree", "urea serica", "serum urea"], unit: "mmol/L", siUnit: null, siFactor: null, source: "BUN research range × 0.357", ranges: [
-    r(1, 18, 2.50, 7.14), r(18, null, 2.86, 8.57, M), r(18, null, 2.14, 7.50, F) ] },
+  // Adult urea from Tietz. Children: BUN ranges above × 0.357 (urea mmol/L = BUN mg/dL × 0.357).
+  { id: "urea", name: "Urea", loinc: "22664-7", aliases: ["uree", "urea serica", "uree serica", "serum urea"], unit: "mmol/L", siUnit: "mg/dL", siFactor: 6.006, source: "Tietz", ranges: [
+    r(1, 18, 2.50, 7.14, { source: "BUN pediatric range × 0.357" }),
+    r(18, null, 1.8, 7.1, { source: "Tietz (BUN-derived would be 2.86–8.57 M / 2.14–7.50 F)" }) ] },
   { id: "crea", name: "Creatinine", loinc: "2160-0", aliases: ["creat", "serum creatinine", "creatinina"], unit: "mg/dL", siUnit: "umol/L", siFactor: 88.4, source: LAB, ranges: [
     r(0, 1, 0.17, 0.42), r(1, 6, 0.19, 0.49), r(6, 11, 0.26, 0.61), r(11, 15, 0.35, 0.86), r(15, null, 0.74, 1.35, M), r(15, null, 0.59, 1.04, F) ] },
   { id: "ca", name: "Calcium (total)", loinc: "17861-6", aliases: ["ca", "calcium", "total calcium", "calciu"], unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.2495, source: LAB, ranges: [
     r(0, 1, 8.7, 11.0), r(1, 18, 9.3, 10.6), r(18, 60, 8.6, 10.0), r(60, null, 8.8, 10.2) ] },
-  { id: "mg", name: "Magnesium", loinc: "19123-9", aliases: ["mg", "magneziu"], unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.411, source: LAB, ranges: [r(18, null, 1.6, 2.3)] },
-  { id: "phos", name: "Phosphate", loinc: "2777-1", aliases: ["phosphorus", "po4", "fosfor"], unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.323, source: LAB, ranges: [r(18, null, 2.5, 4.5)] },
-  { id: "glu", name: "Glucose (fasting)", loinc: "1558-6", aliases: ["glucose", "fasting glucose", "fbg", "glycemia", "glicemie", "glucoza"], fasting: true, unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.0555, source: "ADA", ranges: [r(18, null, 70, 99)],
+  { id: "mg", name: "Magnesium", loinc: "19123-9", aliases: ["mg", "magneziu"], unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.411, source: LAB, ranges: [
+    r(0, 18, 1.6, 2.5, CAL),r(18, null, 1.6, 2.3)] },
+  { id: "phos", name: "Phosphate", loinc: "2777-1", aliases: ["phosphorus", "po4", "fosfor"], unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.323, source: LAB, ranges: [
+    r(0, 18, 3.1, 6.0, CAL),r(18, null, 2.5, 4.5)] },
+  { id: "glu", name: "Glucose (fasting)", loinc: "1558-6", aliases: ["glucose", "fasting glucose", "fbg", "glycemia", "glicemie", "glucoza"], fasting: true, unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.0555, source: "ADA", ranges: [
+    r(0, 18, 60, 100, CAL),r(18, null, 70, 99)],
     tiers: [{ gte: 126, label: "≥ 126: diabetes range (ADA)" }, { gte: 100, label: "100–125: prediabetes (ADA)" }] },
   { id: "glur", name: "Glucose (random)", loinc: "2345-7", aliases: ["glucose", "random glucose", "glycemia", "glicemie", "glucoza"], fasting: false, unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.0555, source: "ADA", ranges: [r(18, null, 70, 140)],
     tiers: [{ gte: 200, label: "≥ 200: diabetes range if symptomatic (ADA)" }] },
-  { id: "tp", name: "Total protein", loinc: "2885-2", aliases: ["protein", "proteine totale"], unit: "g/dL", siUnit: "g/L", siFactor: 10, source: LAB, ranges: [r(1, null, 6.3, 8.2)] },
-  { id: "alb", name: "Albumin", loinc: "1751-7", aliases: ["alb", "albumina"], unit: "g/dL", siUnit: "g/L", siFactor: 10, source: LAB, ranges: [r(1, null, 3.5, 5.0)] },
+  { id: "tp", name: "Total protein", loinc: "2885-2", aliases: ["protein", "proteine totale"], unit: "g/dL", siUnit: "g/L", siFactor: 10, source: LAB, ranges: [
+    r(0, 1, 5.1, 7.3, CAL),r(1, null, 6.3, 8.2)] },
+  { id: "alb", name: "Albumin", loinc: "1751-7", aliases: ["alb", "albumina"], unit: "g/dL", siUnit: "g/L", siFactor: 10, source: LAB, ranges: [
+    r(0, 1, 3.3, 4.9, CAL),r(1, null, 3.5, 5.0)] },
 
   // Liver
-  { id: "alt", name: "ALT", loinc: "1743-4", aliases: ["1742-6", "alanine aminotransferase", "sgpt", "tgp", "alat", "gpt", "alaninaminotransferaza"], unit: "U/L", siUnit: "IU/L", siFactor: 1, source: "Lab range; ACG healthy limit shown as note", ranges: [
+  { id: "alt", name: "ALT", loinc: "1743-4", aliases: ["1742-6", "alanine aminotransferase", "sgpt", "tgp", "alat", "gpt", "alaninaminotransferaza", "tgp/alat"], unit: "U/L", siUnit: "IU/L", siFactor: 1, source: "Lab range; ACG healthy limit shown as note", ranges: [
+    r(0, 18, 13, 50, CAL),
     r(18, null, 7, 55, M), r(18, null, 7, 45, F) ],
     tiers: [{ sex: "M", gte: 33, label: "Above ACG healthy limit (< 33)" }, { sex: "F", gte: 25, label: "Above ACG healthy limit (< 25)" }] },
-  { id: "ast", name: "AST", loinc: "30239-8", aliases: ["1920-8", "aspartate aminotransferase", "sgot", "tgo", "asat", "got", "aspartataminotransferaza"], unit: "U/L", siUnit: "IU/L", siFactor: 1, source: LAB, ranges: [
+  { id: "ast", name: "AST", loinc: "30239-8", aliases: ["1920-8", "aspartate aminotransferase", "sgot", "tgo", "asat", "got", "aspartataminotransferaza", "tgo/asat"], unit: "U/L", siUnit: "IU/L", siFactor: 1, source: LAB, ranges: [
+    r(0, 1, 28, 52, CAL), r(14, 18, 17, 36, CAL),
     r(1, 14, 8, 60), r(18, null, 8, 48, M), r(18, null, 8, 43, F) ] },
   { id: "alp", name: "ALP", loinc: "6768-6", aliases: ["alkaline phosphatase", "alk phos", "fosfataza alcalina"], unit: "U/L", siUnit: "IU/L", siFactor: 1, source: LAB + " (high in growing children)", ranges: [
+    r(15 * D, 1, 138, 347, CAL), r(11, 13, 104, 438, { ...F, ...CAL }), r(13, 19, 57, 373, { ...F, ...CAL }), r(16, 19, 53, 184, { ...M, ...CAL }),
     r(0, 15 * D, 83, 248), r(1, 11, 142, 335), r(13, 16, 116, 468, M), r(19, null, 40, 129) ] },
   { id: "ggt", name: "GGT", loinc: "2324-2", aliases: ["gamma-glutamyl transferase", "gamma gt", "gama-glutamiltransferaza", "gama glutamiltransferaza"], unit: "U/L", siUnit: "IU/L", siFactor: 1, source: LAB, ranges: [
+    r(7, 18, 9, 31, CAL),
     r(0, 1, null, 178, LT), r(1, 7, null, 21, LT), r(18, null, 8, 61, M), r(18, null, 5, 36, F) ] },
-  { id: "tbil", name: "Total bilirubin", loinc: "1975-2", aliases: ["bilirubin", "bilirubina totala", "tbil"], unit: "mg/dL", siUnit: "umol/L", siFactor: 17.1, source: LAB + " (mild isolated rise often Gilbert's)", ranges: [r(18, null, 0.1, 1.2)] },
-  { id: "dbil", name: "Direct bilirubin", loinc: "1968-7", aliases: ["conjugated bilirubin", "bilirubina directa", "dbil"], unit: "mg/dL", siUnit: "umol/L", siFactor: 17.1, source: LAB, ranges: [r(18, null, 0.0, 0.3)] },
+  { id: "tbil", name: "Total bilirubin", loinc: "1975-2", aliases: ["bilirubin", "bilirubina totala", "tbil"], unit: "mg/dL", siUnit: "umol/L", siFactor: 17.1, source: LAB + " (mild isolated rise often Gilbert's)", ranges: [
+    r(0, 18, 0.3, 1.0, CAL),r(18, null, 0.1, 1.2)] },
+  { id: "dbil", name: "Direct bilirubin", loinc: "1968-7", aliases: ["conjugated bilirubin", "bilirubina directa", "dbil"], unit: "mg/dL", siUnit: "umol/L", siFactor: 17.1, source: LAB, ranges: [
+    r(0, 18, 0.1, 0.3, CAL),r(18, null, 0.0, 0.3)] },
 
   // Lipids (pediatric = AAP/NHLBI "acceptable", adult = AHA "desirable")
   { id: "tc", name: "Total cholesterol", loinc: "2093-3", aliases: ["cholesterol", "chol", "total chol", "colesterol total"], unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.0259, source: "AHA / NHLBI / AAP", ranges: [
@@ -98,37 +135,73 @@ let REF = { version: "research-2026-09", markers: [
 
   // Thyroid
   { id: "tsh", name: "TSH", loinc: "11579-0", aliases: ["3016-3", "thyrotropin", "thyroid stimulating hormone"], unit: "mIU/L", siUnit: "uIU/mL", siFactor: 1, source: "Quest / ATA", ranges: [
+    r(0, 7 * D, 0.70, 15.20, CAL), r(7 * D, 18, 0.50, 4.30, CAL),
+    mr("roche", 0.27, 4.20), mr("roche", 0.01, 4.10, T1), mr("abbott", 0.35, 4.94), mr("abbott", 0.05, 2.53, T1), mr("siemens", 0.35, 4.00), mr("siemens", 0.10, 2.80, T1),
     r(18, null, 0.45, 4.50),
     r(null, null, 0.10, 2.50, { ...F, pregnancy: 1, source: "ATA; up to 4.0 acceptable if TPO-Ab negative" }),
     r(null, null, 0.20, 3.00, { ...F, pregnancy: 2, source: "ATA; up to 4.0 acceptable if TPO-Ab negative" }),
     r(null, null, 0.30, 3.00, { ...F, pregnancy: 3, source: "ATA; up to 4.0 acceptable if TPO-Ab negative" }) ] },
   { id: "ft4", name: "Free T4", loinc: "3024-7", aliases: ["ft4", "free thyroxine", "t4 liber"], unit: "ng/dL", siUnit: "pmol/L", siFactor: 12.87, source: LAB, ranges: [
+    r(0, 18, 0.9, 1.7, CAL),
+    mr("roche", pm4(11.9), pm4(21.6)), mr("roche", pm4(10.7), pm4(21.2), T1), mr("abbott", pm4(11.5), pm4(22.7)), mr("abbott", pm4(11.35), pm4(17.35), T1), mr("siemens", pm4(10.3), pm4(21.9)), mr("siemens", pm4(11.2), pm4(20.1), T1),
     r(18, null, 0.8, 1.8), r(null, null, 0.8, 1.7, { ...F, pregnancy: 1 }) ] },
-  { id: "ft3", name: "Free T3", loinc: "3026-2", aliases: ["ft3", "free triiodothyronine", "t3 liber"], unit: "pg/mL", siUnit: "pmol/L", siFactor: 1.536, source: LAB, ranges: [r(18, null, 2.0, 4.4)] },
-  { id: "tpo", name: "TPO antibodies", loinc: "8099-4", aliases: ["anti-tpo", "tpo ab", "atpo"], unit: "IU/mL", siUnit: "kIU/L", siFactor: 1, source: "Assay dependent", ranges: [r(18, null, null, 9.0, LT)] },
-  { id: "tgab", name: "Thyroglobulin antibodies", loinc: "8098-6", aliases: ["tgab", "anti-tg", "atg"], unit: "IU/mL", siUnit: "kIU/L", siFactor: 1, source: "Assay dependent", ranges: [r(18, null, null, 4.0, LT)] },
+  { id: "ft3", name: "Free T3", loinc: "3026-2", aliases: ["ft3", "free triiodothyronine", "t3 liber"], unit: "pg/mL", siUnit: "pmol/L", siFactor: 1.536, source: LAB, ranges: [
+    r(0, 18, 2.3, 4.9, CAL),
+    mr("roche", pm3(3.9), pm3(6.8)), mr("roche", pm3(3.59), pm3(5.59), T1), mr("abbott", pm3(2.76), pm3(6.45)), mr("abbott", pm3(2.37), pm3(8.02), T1), mr("siemens", pm3(3.5), pm3(6.5)), mr("siemens", pm3(3.1), pm3(6.2), T1),r(18, null, 2.0, 4.4)] },
+  { id: "tpo", name: "TPO antibodies", loinc: "8099-4", aliases: ["anti-tpo", "tpo ab", "atpo"], unit: "IU/mL", siUnit: "kIU/L", siFactor: 1, source: "Assay dependent", ranges: [
+    mr("roche", null, 34, { strict: true, source: "Roche insert < 34; Synevo (Roche) prints < 8 negative, 8–20 equivocal" }), mr("abbott", null, 5.61, LT), mr("siemens", null, 60, LT),r(18, null, null, 9.0, LT)] },
+  { id: "tgab", name: "Thyroglobulin antibodies", loinc: "8098-6", aliases: ["tgab", "anti-tg", "atg"], unit: "IU/mL", siUnit: "kIU/L", siFactor: 1, source: "Assay dependent", ranges: [
+    mr("roche", null, 115, LT), mr("abbott", null, 4.11, LT), mr("siemens", null, 60, LT),r(18, null, null, 4.0, LT)] },
 
   // Vitamins / iron
-  { id: "vitd", name: "Vitamin D (25-OH)", loinc: "62288-6", aliases: ["1989-3", "vitamin d", "25-oh vitamin d", "25(oh)d", "calcidiol", "vitamina d"], unit: "ng/mL", siUnit: "nmol/L", siFactor: 2.496, source: "Endocrine Society", ranges: [r(18, null, 30, 100)],
+  { id: "vitd", name: "Vitamin D (25-OH)", loinc: "62288-6", aliases: ["1989-3", "vitamin d", "25-oh vitamin d", "25(oh)d", "calcidiol", "vitamina d"], unit: "ng/mL", siUnit: "nmol/L", siFactor: 2.496, source: "Endocrine Society", ranges: [
+    r(0, 18, 30, 100, CAL),r(18, null, 30, 100)],
     tiers: [{ lt: 20, label: "< 20: deficient" }, { lt: 30, label: "20–29: insufficient" }] },
-  { id: "b12", name: "Vitamin B12", loinc: "2132-9", aliases: ["b12", "cobalamin", "vitamina b12"], unit: "pg/mL", siUnit: "pmol/L", siFactor: 0.738, source: "Mayo Clinic Laboratories", ranges: [r(18, null, 200, 1100)],
+  { id: "b12", name: "Vitamin B12", loinc: "2132-9", aliases: ["b12", "cobalamin", "vitamina b12"], unit: "pg/mL", siUnit: "pmol/L", siFactor: 0.738, source: "Mayo Clinic Laboratories", ranges: [
+    r(0, 18, 200, 900, CAL),r(18, null, 200, 1100)],
     tiers: [{ gte: 200, lte: 400, label: "200–400: possible subclinical deficiency (check MMA)" }] },
-  { id: "folate", name: "Folate", loinc: "2284-8", aliases: ["folic acid", "acid folic", "folat"], unit: "ng/mL", siUnit: "nmol/L", siFactor: 2.266, source: "Mayo Clinic Laboratories", ranges: [r(18, null, 4.0, null, LT)] },
-  { id: "ferr", name: "Ferritin", loinc: "22702-5", aliases: ["2276-4", "ferritina"], unit: "ng/mL", siUnit: "ug/L", siFactor: 1, source: "Mayo Clinic (rises with inflammation)", ranges: [
+  { id: "folate", name: "Folate", loinc: "2284-8", aliases: ["folic acid", "acid folic", "folat"], unit: "ng/mL", siUnit: "nmol/L", siFactor: 2.266, source: "Mayo Clinic Laboratories", ranges: [
+    r(0, 18, 4.0, 24.0, CAL),r(18, null, 4.0, null, LT)] },
+  { id: "ferr", name: "Ferritin", loinc: "22702-5", aliases: ["2276-4", "ferritina", "feritina", "feritina serica"], unit: "ng/mL", siUnit: "ug/L", siFactor: 1, source: "Mayo Clinic (rises with inflammation)", ranges: [
+    r(0, 18, 14, 150, CAL),
     r(18, null, 24, 336, M), r(18, null, 11, 307, F) ] },
   { id: "iron", name: "Serum iron", loinc: "2498-4", aliases: ["iron", "fe", "sideremie", "fier"], unit: "ug/dL", siUnit: "umol/L", siFactor: 0.179, source: "Mayo Clinic", ranges: [
+    r(0, 18, 40, 120, CAL),
     r(18, null, 65, 176, M), r(18, null, 50, 170, F) ] },
-  { id: "tibc", name: "TIBC", loinc: "2500-7", aliases: ["total iron binding capacity"], unit: "ug/dL", siUnit: "umol/L", siFactor: 0.179, source: "Mayo Clinic", ranges: [r(18, null, 250, 450)] },
-  { id: "tsat", name: "Transferrin saturation", loinc: "2502-3", aliases: ["tsat", "iron saturation"], unit: "%", siUnit: "fraction", siFactor: 0.01, source: "Mayo Clinic", ranges: [r(18, null, 20, 50)] },
+  { id: "tibc", name: "TIBC", loinc: "2500-7", aliases: ["total iron binding capacity"], unit: "ug/dL", siUnit: "umol/L", siFactor: 0.179, source: "Mayo Clinic", ranges: [
+    r(0, 18, 250, 400, CAL),r(18, null, 250, 450)] },
+  { id: "tsat", name: "Transferrin saturation", loinc: "2502-3", aliases: ["tsat", "iron saturation"], unit: "%", siUnit: "fraction", siFactor: 0.01, source: "Mayo Clinic", ranges: [
+    r(0, 18, 15, 45, CAL),r(18, null, 20, 50)] },
 
   // Inflammatory / other
   { id: "hscrp", name: "hs-CRP", loinc: "30522-7", aliases: ["hscrp", "high sensitivity crp", "crp hs"], unit: "mg/L", siUnit: "mg/L", siFactor: 1, source: "AHA (cardiovascular risk)", ranges: [r(18, null, null, 3.0, LT)] },
   { id: "esr", name: "ESR", loinc: "4538-4", aliases: ["sed rate", "vsh", "sedimentation rate"], unit: "mm/h", siUnit: "mm/hr", siFactor: 1, miller: true, source: "Lab range, raised to Miller age limit when higher", ranges: [
+    r(0, 18, 0, 20, { source: "Tietz (pediatric)" }),
     r(18, null, 0, 15, M), r(18, null, 0, 20, F) ] },
-  { id: "hba1c", name: "HbA1c", loinc: "4548-4", aliases: ["a1c", "glycated hemoglobin", "hemoglobin a1c", "hemoglobina glicata"], unit: "%", siUnit: "mmol/mol", siFactor: 10.929, siOffset: -23.5, source: "ADA", ranges: [r(18, null, 4.0, 5.6)],
+  { id: "hba1c", name: "HbA1c", loinc: "4548-4", aliases: ["a1c", "glycated hemoglobin", "hemoglobin a1c", "hemoglobina glicata"], unit: "%", siUnit: "mmol/mol", siFactor: 10.929, siOffset: -23.5, source: "ADA", ranges: [
+    r(0, 18, 4.0, 5.6, CAL),r(18, null, 4.0, 5.6)],
     tiers: [{ gte: 6.5, label: "≥ 6.5: diabetes range (ADA)" }, { gte: 5.7, label: "5.7–6.4: prediabetes (ADA)" }] },
   { id: "uric", name: "Uric acid", loinc: "3084-1", aliases: ["urate", "acid uric"], unit: "mg/dL", siUnit: "umol/L", siFactor: 59.48, source: LAB, ranges: [
-    r(18, null, 4.0, 8.5, M), r(18, null, 2.7, 7.3, F) ] }
+    r(0, 18, 2.0, 6.0, CAL),
+    r(18, null, 4.0, 8.5, M), r(18, null, 2.7, 7.3, F) ] },
+  // Added from the second research round (CALIPER / Tietz / method inserts).
+  { id: "neutp", name: "Neutrophils (%)", loinc: "770-8", aliases: ["neutrophils", "neutrophils %", "neutrofile", "neutrofil", "neu%", "neut%"], unit: "%", siUnit: "%", siFactor: 1, source: "CALIPER", ranges: [
+    r(0, 1, 8.7, 57.9), r(1, 5, 17.6, 68.6), r(5, 15, 28.9, 68.6), r(15, 19, 39.6, 76.1) ] },
+  { id: "lymphp", name: "Lymphocytes (%)", loinc: "736-9", aliases: ["lymphocytes", "lymphocytes %", "limfocite", "limfocit", "lym%"], unit: "%", siUnit: "%", siFactor: 1, source: "CALIPER", ranges: [
+    r(0, 1, 24.9, 62.3), r(1, 5, 26.2, 57.4), r(5, 19, 23.4, 59.2) ] },
+  { id: "monop", name: "Monocytes (%)", loinc: "5905-5", aliases: ["monocytes", "monocytes %", "monocite", "monocit", "mon%"], unit: "%", siUnit: "%", siFactor: 1, source: "CALIPER", ranges: [r(0, 18, 3.5, 11.2)] },
+  { id: "eosp", name: "Eosinophils (%)", loinc: "713-8", aliases: ["eosinophils", "eosinophils %", "eozinofile", "eozinofil", "eos%"], unit: "%", siUnit: "%", siFactor: 1, source: "CALIPER", ranges: [r(0, 18, 0.3, 6.8)] },
+  // Basophils (%) left out: the research gave 0–0.4 %, which is implausibly low (usual 0–2 %).
+  { id: "pdw", name: "PDW", loinc: "32207-3", aliases: ["platelet distribution width", "largimea distributiei trombocitare"], unit: "fL", siUnit: "fL", siFactor: 1, source: "CALIPER (Mindray)", ranges: [r(0, 18, 9.0, 17.0)] },
+  { id: "pdwp", name: "PDW (%)", loinc: "32207-3", aliases: ["pdw", "platelet distribution width", "largimea distributiei trombocitare"], unit: "%", siUnit: "%", siFactor: 1, source: "Generic", ranges: [r(0, 18, 10.0, 18.0)] },
+  { id: "crp", name: "CRP", loinc: "1988-5", aliases: ["c-reactive protein", "proteina c reactiva", "pcr"], unit: "mg/L", siUnit: "mg/L", siFactor: 1, source: "CALIPER", ranges: [r(0, 18, null, 3.0, LT)] },
+  { id: "amyp", name: "Pancreatic amylase", loinc: "1805-1", aliases: ["p-amylase", "amilaza pancreatica", "amilaza pancreatica in ser"], unit: "U/L", siUnit: "IU/L", siFactor: 1, source: "IFCC / Tietz", ranges: [r(0, 18, 13, 53)] },
+  { id: "amy", name: "Amylase (total)", loinc: "1798-8", aliases: ["amylase", "amilaza", "amilaza totala"], unit: "U/L", siUnit: "IU/L", siFactor: 1, source: "CALIPER", ranges: [r(0, 18, 28, 100)] },
+  // LOINC: research listed 3043-1; 3040-3 is the standard serum lipase code.
+  { id: "lipase", name: "Lipase", loinc: "3040-3", aliases: ["lipaza"], unit: "U/L", siUnit: "IU/L", siFactor: 1, source: "CALIPER", ranges: [r(0, 18, 13, 60)] },
+  { id: "ibil", name: "Indirect bilirubin", loinc: "1971-1", aliases: ["unconjugated bilirubin", "bilirubina indirecta"], unit: "mg/dL", siUnit: "umol/L", siFactor: 17.1, source: "Tietz", ranges: [
+    r(0, 7 * D, 0.2, 12.0, { source: "Tietz physiologic newborn range; AAP 2022 phototherapy lines are separate treatment thresholds" }), r(7 * D, null, 0.2, 0.7) ] },
+  { id: "ica", name: "Ionized calcium", loinc: "17863-2", aliases: ["calciu ionic", "ca ionic", "ica", "calcium ionized"], unit: "mg/dL", siUnit: "mmol/L", siFactor: 0.25, source: "Tietz", ranges: [r(18, null, 4.5, 4.9)] },
 ] };
 
 const $ = id => document.getElementById(id);
@@ -142,7 +215,8 @@ const stripNote = s => String(s ?? "").replace(/\s*[({[].*?[)}\]]/g, "");
 const fitsProfile = (x, p) =>
   (x.sex == null || x.sex === p.sex) &&
   (x.ageMin ?? 0) <= p.age && p.age < (x.ageMax ?? 200) &&
-  (x.pregnancy == null || x.pregnancy === p.trimester);
+  (x.pregnancy == null || x.pregnancy === p.trimester) &&
+  (x.method == null || x.method === p.method);
 
 // Returns value in the marker's conventional unit, or null if the unit is unknown.
 function toConventional(m, value, unit) {
@@ -169,10 +243,11 @@ function findMarker(name, unit, p) {
   return hits.sort((a, b) => score(b) - score(a))[0];
 }
 
-// Most specific range wins: pregnancy > sex > age-bounded. Gaps in the research stay unmatched.
+// Most specific range wins: pregnancy > analyzer method > sex > age-bounded, then the narrowest age band. Gaps stay unmatched.
 function pickRange(m, p) {
-  const score = x => (x.pregnancy ? 4 : 0) + (x.sex ? 2 : 0) + (x.ageMin != null || x.ageMax != null ? 1 : 0);
-  const best = m.ranges.filter(x => fitsProfile(x, p)).sort((a, b) => score(b) - score(a))[0];
+  const score = x => (x.pregnancy ? 8 : 0) + (x.method ? 4 : 0) + (x.sex ? 2 : 0) + (x.ageMin != null || x.ageMax != null ? 1 : 0);
+  const span = x => (x.ageMax ?? 200) - (x.ageMin ?? 0);
+  const best = m.ranges.filter(x => fitsProfile(x, p)).sort((a, b) => score(b) - score(a) || span(a) - span(b))[0];
   if (!best) return null;
   const out = { ...best };
   if (m.miller && out.high != null) {
@@ -212,14 +287,15 @@ function parseNumber(x) {
 
 // Lab-printed range. Plain: "3.5-5.0", "3,5 - 5,0", "<200", ">40", "≤ 5".
 // Annotated, as real reports print them: "3.33-5.54: Normal 5.55-6.99: ...", "< 8 (negativ) 8-20 (echivoc) ...",
-// "Adulti: <20.5 Copii > 1 luna: < 17.1" (picked by age).
+// "Adulti: <20.5 Copii > 1 luna: < 17.1" (picked by age), "Barbati: 13-17 Femei: 12-15" (picked by sex).
 const RANGE_TOKEN = String.raw`(-?\d+(?:\.\d+)?\s*[-–]\s*\d+(?:\.\d+)?|[<>≤≥]=?\s*\d+(?:\.\d+)?)`;
-function parseRange(s, age = 18) {
+function parseRange(s, age = 18, sex = null) {
   s = String(s ?? "").trim().replace(/(\d),(\d)/g, "$1.$2");
   if (!s) return null;
   const pick = re => { const m = s.match(new RegExp(re, "i")); return m && plainRange(m[1]); };
   return plainRange(s)
     || pick(RANGE_TOKEN + String.raw`\s*:?\s*\(?\s*(?:normal|negativ)`)
+    || (sex && pick((sex === "F" ? "femei" : "b[aă]rba[tț]i") + String.raw`\s*:\s*` + RANGE_TOKEN))
     || pick((age >= 18 ? String.raw`adult\w*` : "copii[^:]*") + String.raw`\s*:\s*` + RANGE_TOKEN);
 }
 function plainRange(s) {
@@ -286,7 +362,7 @@ function analyse(rows, p) {
     if (raw == null) return { ...o, status: "none", why: "Value not numeric" };
     const v = m ? toConventional(m, raw, x.unit) : null;
     o.v = v;
-    const labR = parseRange(x.range, p.age);
+    const labR = parseRange(x.range, p.age, p.sex);
     if (labR) {
       // Lab range wins. The research range still runs alongside so disagreements are visible.
       Object.assign(o, { dv: raw, du: x.unit, range: labR });
@@ -387,7 +463,14 @@ function selfTest() {
     ["unknown unit rejected", toConventional(byId("glu"), 5.5, "g/L") === null],
     ["pregnancy range wins", pickRange(hgb, P({ sex: "F", trimester: 2 })).low === 10.5],
     ["neonate 10 days", pickRange(hgb, P({ age: 10 * D })).low === 13.4],
-    ["age gap stays unmatched (Hb 2.5 y)", pickRange(hgb, P({ age: 2.5 })) === null],
+    ["age gap stays unmatched (lipids at 1 y)", pickRange(byId("tc"), P({ age: 1 })) === null],
+    ["Roche FT4 range when method set", eq(fromConventional(byId("ft4"), pickRange(byId("ft4"), P({ method: "roche" })).high, "pmol/L"), 21.6, 1e-9)],
+    ["no method = generic FT4", pickRange(byId("ft4"), P()).high === 1.8],
+    ["trimester 2 beats method adult range", pickRange(byId("tsh"), P({ sex: "F", trimester: 2, method: "roche" })).low === 0.20],
+    ["method trimester 1 range", pickRange(byId("tsh"), P({ sex: "F", trimester: 1, method: "abbott" })).high === 2.53],
+    ["% differential picked by unit", findMarker("Neutrofil", "%", P())?.id === "neutp" && findMarker("Neutrofil", "mii/µL", P())?.id === "neut"],
+    ["narrowest age band wins (WBC 1 y)", pickRange(byId("wbc"), P({ age: 1 })).low === 5.75],
+    ["sex-annotated lab range", parseRange("Barbati: 13-17 Femei: 12-15", 30, "F").low === 12 && parseRange("Barbati: 13-17 Femei: 12-15", 30, "M").high === 17],
     ["altitude raises Hb", eq(pickRange(hgb, P({ altitude: 2500 })).low, 13.7, 0.001)],
     ["ESR Miller for 70 y male", pickRange(byId("esr"), P({ age: 70 })).high === 35],
     ["strict '<200': 200 is high", classify(200, { high: 200, strict: true }) === "high" && classify(199, { high: 200, strict: true }) === "normal"],
@@ -408,7 +491,7 @@ function selfTest() {
     ["annotated range: age-picked", parseRange("Adulti: <20.5 Copii > 1 luna: < 17.1", 20).high === 20.5 && parseRange("Adulti: <20.5 Copii > 1 luna: < 17.1", 10).high === 17.1],
     ["annotated range: Normal band", parseRange("glicemie bazala (ADA): 3.33-5.54: Normal 5.55-6.99: modificata").high === 5.54],
     ["annotated range: negativ", parseRange("< 8 (negativ) Nu indica 8-20 (echivoc) >20 (pozitiv)").high === 8],
-    ["BUN mmol/L not converted, urea checked", toConventional(byId("bun"), 1.5, "mmol/L") === null && findMarker("Urea", "mmol/L", P())?.id === "urea" && pickRange(byId("urea"), P()).low === 2.86],
+    ["BUN mmol/L not converted, urea checked", toConventional(byId("bun"), 1.5, "mmol/L") === null && findMarker("Urea", "mmol/L", P())?.id === "urea" && pickRange(byId("urea"), P()).low === 1.8],
     ["lab range wins, research disagreement kept", (o => o.status === "high" && o.disagree === true)(analyse([{ marker: "FT4", value: "21.7", unit: "pmol/L", range: "11.9 - 21.6" }], P()).out[0])],
     ["Romanian names + braces", findMarker("Hemoglobina {Hb}", "g/L", P())?.id === "hgb" && findMarker("Fier (sideremie)", "µmol/L", P())?.id === "iron"],
     ["Lp(a) not broken by note stripping", findMarker("Lp(a)", "mg/dL", P())?.id === "lpa"],

@@ -23,6 +23,7 @@
         <div><label for="preg">Pregnancy</label>
           <select id="preg"><option value="0">Not pregnant</option><option value="1">Trimester 1</option><option value="2">Trimester 2</option><option value="3">Trimester 3</option></select></div>
         <div><label for="alt">Altitude (m)</label><input id="alt" type="number" min="0" step="100" value="0"></div>
+        <div><label for="method">Lab analyzer (thyroid tests)</label><select id="method"><option value="" selected>Unknown</option><option value="roche">Roche (ECLIA)</option><option value="abbott">Abbott (CMIA)</option><option value="siemens">Siemens Atellica</option></select></div>
       </div>
       <label class="inline"><input id="fasting" type="checkbox" checked> Fasting sample (8 h+)</label>
     </section>
@@ -79,7 +80,7 @@ function render() {
 const profile = () => ({
   age: +$("age").value / +$("ageUnit").value, sex: $("sex").value,
   trimester: $("sex").value === "F" ? +$("preg").value : 0,
-  fasting: $("fasting").checked, altitude: +$("alt").value || 0
+  fasting: $("fasting").checked, altitude: +$("alt").value || 0, method: $("method").value || null
 });
 function run() {
   try { last = analyse(parseLab($("labText").value), profile()); render(); }
@@ -89,7 +90,7 @@ const readFile = (input, cb) => input.files[0]?.text().then(cb);
 const refInfo = () => $("refInfo").textContent = `Loaded: ${REF.version} — ${REF.markers.length} markers.`;
 
 $("run").onclick = run;
-["age", "ageUnit", "sex", "preg", "alt", "fasting"].forEach(id => $(id).onchange = () => last && run());
+["age", "ageUnit", "sex", "preg", "alt", "fasting", "method"].forEach(id => $(id).onchange = () => last && run());
 $("labFile").onchange = () => readFile($("labFile"), t => { $("labText").value = t; run(); });
 $("refFile").onchange = () => readFile($("refFile"), t => {
   try { REF = JSON.parse(t); refInfo(); last && run(); } catch (e) { $("refInfo").textContent = "Invalid JSON: " + e.message; }
