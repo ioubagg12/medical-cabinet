@@ -1,27 +1,137 @@
-// Advice shown on the Journal tab, built from the latest blood test.
-// Owned by: Journal epic.
-//
-// Placeholder data for the design. The real logic should produce an object
-// of this same shape from the blood results; AdvicePage only renders it.
-//
-//   source           which test the advice is based on
-//   markers[]        blood values; status is 'low' | 'normal' | 'high'
-//   recommendations  kind is 'nutrition' | 'exercise'; marker names the
-//                    blood value the tip responds to (shown as a tag)
+// Blood test advice data and dynamic analysis provider.
+// Integrates bloodEngine reference data with clinical advice rules.
 
-export const ADVICE = {
-  source: { test: 'Blood test', date: '12 May 2026', reviewedBy: 'Dr. Mette Holm' },
-  markers: [
-    { name: 'Vitamin D', value: '38', unit: 'nmol/L', range: '50–125', status: 'low' },
-    { name: 'Ferritin', value: '85', unit: 'µg/L', range: '30–300', status: 'normal' },
-    { name: 'HbA1c', value: '34', unit: 'mmol/mol', range: '< 42', status: 'normal' },
-    { name: 'LDL', value: '2.6', unit: 'mmol/L', range: '< 3.0', status: 'normal' },
-  ],
-  recommendations: [
-    { kind: 'nutrition', title: 'Fatty fish twice a week', detail: 'Salmon, herring or mackerel are the richest food sources of vitamin D.', marker: 'Vitamin D' },
-    { kind: 'nutrition', title: 'Keep the daily supplement', detail: '38 µg of vitamin D every day through the winter, as your doctor advised.', marker: 'Vitamin D' },
-    { kind: 'nutrition', title: 'Eggs and fortified dairy', detail: 'Easy daily top-ups. Choose lactose-free fortified milk.', marker: 'Vitamin D' },
-    { kind: 'exercise', title: '20 minutes outside in daylight', detail: 'A brisk walk around midday helps your skin make vitamin D.', marker: 'Vitamin D' },
-    { kind: 'exercise', title: 'Strength training twice a week', detail: 'Weight-bearing exercise keeps bones strong while vitamin D is low.', marker: 'Vitamin D' },
-  ],
+import { useState } from 'react';
+import { parseLab, analyse, rangeText } from '../../shared/bloodEngine.js';
+import { generateRecommendations } from './adviceRules.js';
+
+const STORAGE_KEY = 'mc_blood_advice_data';
+
+export const DEFAULT_PATIENT_PROFILE = {
+  age: 35,
+  sex: 'M',
+  fasting: true,
+  trimester: 0,
+  altitude: 0,
+  method: null,
+};
+
+export const DEFAULT_LAB_CSV = `marker,value,unit
+Vitamin D,18,ng/mL
+LDL cholesterol,138,mg/dL
+Total cholesterol,215,mg/dL
+HDL cholesterol,46,mg/dL
+Triglycerides,165,mg/dL
+Glucose,94,mg/dL
+Ferritin,85,ug/L
+Hemoglobin,14.8,g/dL
+ALT,28,U/L
+Creatinine,0.95,mg/dL`;
+
+/**
+ * Runs raw lab text through bloodEngine and generates clinical advice.
+ */
+export function processBloodReport(rawText, profile = DEFAULT_PATIENT_PROFILE, source = null) {
+  const p = { ...DEFAULT_PATIENT_PROFILE, ...profile };
+  const rows = parseLab(rawText);
+  const { out, calc } = analyse(rows, p);
+
+  const rawMarkers = out.map((o) => ({
+    id: o.id,
+    name: o.name,
+    value: o.dv != null ? String(+o.dv.toFixed(1)) : String(o.raw ?? o.input?.value ?? '–'),
+    unit: o.du || o.input?.unit || '',
+    range: o.range ? rangeText(o.range, o.du) : '–',
+    status: o.status,
+    tier: o.tier,
+    isCalculated: false,
+  }));
+
+  const calcMarkers = calc.map((c) => ({
+    id: c.id,
+    name: c.name,
+    value: c.dv != null ? String(+c.dv.toFixed(1)) : '–',
+    unit: c.du || '',
+    range: c.range ? rangeText(c.range, c.du) : c.sub || '–',
+    status: c.status,
+    tier: c.tier,
+    isCalculated: true,
+  }));
+
+  const allMarkers = [...rawMarkers, ...calcMarkers];
+  const recommendations = generateRecommendations(allMarkers);
+
+  return {
+    source: source || {
+      test: 'Comprehensive Metabolic & Lipid Panel',
+      date: '12 May 2026',
+      reviewedBy: 'Dr. Mette Holm',
+    },
+    profile: p,
+    rawText,
+    markers: allMarkers,
+    recommendations,
+  };
+}
+
+export const ADVICE = processBloodReport(DEFAULT_LAB_CSV, DEFAULT_PATIENT_PROFILE);
+
+/**
+ * React hook to manage blood test report state and persistence in localStorage.
+ */
+export function useBloodAdvice() {
+  const [advice, setAdvice] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.rawText && parsed?.profile) {
+          return processBloodReport(parsed.rawText, parsed.profile, parsed.source);
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load blood advice from localStorage:', e);
+    }
+    return ADVICE;
+  });
+
+  const uploadReport = (rawText, customProfile, customSource) => {
+    const newAdvice = processBloodReport(
+      rawText,
+      customProfile || advice.profile,
+      customSource || {
+        test: 'Imported Lab Report',
+        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+        reviewedBy: 'Auto-Analyzed (Clinical Research Ranges)',
+      }
+    );
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          rawText,
+          profile: newAdvice.profile,
+          source: newAdvice.source,
+        })
+      );
+    } catch (e) {
+      console.warn('Failed to persist blood advice:', e);
+    }
+    setAdvice(newAdvice);
+  };
+
+  const resetReport = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.warn('Failed to clear blood advice:', e);
+    }
+    setAdvice(ADVICE);
+  };
+
+  return {
+    advice,
+    uploadReport,
+    resetReport,
+  };
 }

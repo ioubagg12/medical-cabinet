@@ -1,0 +1,39 @@
+marker,value,unit,range
+Fier (sideremie),14.5,umol/L,5.83 - 34.5
+Creatinina,75,umol/L,< 106
+Urea,3.22,mmol/L,< 8.3
+Urea nitrogen (BUN),1.505,mmol/L,< 3.88
+Numar leucocite,7.22,10^3/uL,4 - 10
+Numar eritrocite,5.24,10^6/uL,4.3 - 5.7
+Hemoglobina {Hb},154,g/L,132 - 173
+Hematocrit,44.7,%,39 - 49
+Volum eritrocitar mediu {VEM},85.3,fL,80 - 99
+Hemoglobina eritrocitara medie {HEM},29.4,pg/cell,27 - 34
+Concentratie medie a Hb/eritrocit,34.5,g/dL,32 - 37
+Largimea distributiei eritrocitare,12,%,11.6 - 14.8
+Numar trombocite,285,10^3/uL,150 - 450
+Volum trombocitar mediu {VTM},10.7,fL,7.4 - 13
+Largimea distributiei trombocitare,13,fL,8 - 16.5
+Neutrofil,36.7,%,45 - 80
+Neutrofil,2.65,10^3/uL,2 - 8
+Limfocit,49,%,20 - 55
+Limfocit,3.54,10^3/uL,1 - 4
+Monocit,9.6,%,<= 15
+Monocit,0.69,10^3/uL,0.3 - 1
+Eozinofil,3.5,%,<= 7
+Eozinofil,0.25,10^3/uL,0.05 - 0.7
+Bazofil,1.2,%,<= 2
+Bazofil,0.09,10^3/uL,<= 0.2
+VSH,5,mm/h,< 15
+Anti-TPO,< 8,UI/mL,< 8
+FT4 ( Tiroxina libera ),21.7,pmol/L,11.9 - 21.6
+TSH ( Hormon de stimulare tiroidiana ),4.54,uIU/mL,0.27 - 4.2
+Alaninaminotransferaza (GPT/ALAT/ALT),16.2,U/L,< 50
+Aspartataminotransferaza (GOT/ASAT/AST),14.4,U/L,< 50
+Bilirubina totala,7.99,umol/L,< 20.5
+Bilirubina directa,3.87,umol/L,<= 5.1
+Bilirubina indirecta,4.12,umol/L,<= 17.1
+Gama - glutamiltransferaza,11.2,U/L,< 60
+Glucoza,5.35,mmol/L,3.33 - 5.54
+Amilaza pancreatica in ser,19.2,U/L,13 - 53
+Lipaza,22.5,U/L,<= 60

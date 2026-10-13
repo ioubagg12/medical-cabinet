@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-
 import { RUBRICS, TIMELINE } from './data.jsx'
-import { ADVICE } from './advice.js'
+import { useBloodAdvice } from './advice.js'
 import AdvicePage from './AdvicePage.jsx'
 
 const noop = () => {}
@@ -9,9 +8,9 @@ const rubrics = RUBRICS.map((r) => ({ ...r, onClick: noop }))
 const timeline = TIMELINE
 
 export default function JournalScreen() {
-  // Sub-page of this tab: 'advice' shows AdvicePage instead of the journal.
   const [page, setPage] = useState(null)
-  if (page === 'advice') return <AdvicePage advice={ADVICE} onBack={() => setPage(null)} />
+  const { advice, uploadReport, resetReport } = useBloodAdvice()
+  if (page === 'advice') return <AdvicePage advice={advice} onUpload={uploadReport} onReset={resetReport} onBack={() => setPage(null)} />
 
   return (
     <>
@@ -36,7 +35,7 @@ export default function JournalScreen() {
               Blood test advice
             </span>
             <span style={{ fontSize: '11.5px', fontWeight: '600', color: '#cfe5da', opacity: 0.8 }}>
-              Based on your blood analysis · <span style={{ whiteSpace: 'nowrap' }}>{ADVICE.source.date}</span>
+              Based on your blood analysis · <span style={{ whiteSpace: 'nowrap' }}>{advice.source.date}</span>
             </span>
           </div>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7de3b4" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flex: 'none' }}>
@@ -44,7 +43,7 @@ export default function JournalScreen() {
           </svg>
         </div>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-          {ADVICE.markers.map((m) => {
+          {advice.markers.map((m) => {
             const off = m.status !== 'normal'
             return (
               <span key={m.name} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11.5px', fontWeight: '700', color: off ? '#fff' : '#cfe5da', background: off ? 'rgba(245,158,11,.22)' : 'rgba(255,255,255,.08)', border: `1px solid ${off ? 'rgba(245,158,11,.6)' : 'transparent'}`, padding: '4px 9px', borderRadius: '10px' }}>
